@@ -307,7 +307,7 @@ layers {
   weight_decay: 1
   weight_decay: 0
   inner_product_param {
-    num_output: 1
+    num_output: 4096
     weight_filler {
       type: "gaussian"
       std: 0.005
@@ -597,7 +597,7 @@ layers {
   weight_decay: 1
   weight_decay: 0
   inner_product_param {
-    num_output: 1
+    num_output: 4096
     weight_filler {
       type: "gaussian"
       std: 0.005
@@ -637,3 +637,17 @@ layers {
     bottom: "label"
     top: "loss"
 }
+
+
+layer {
+  name: "testloss"
+  type: "EuclideanLoss"
+  bottom: "fc7"
+  bottom: "fc7_p"
+  include {
+    phase: TEST
+  }
+  top: "testloss"
+}
+
+
