@@ -639,15 +639,14 @@ layers {
 }
 
 
-layer {
-  name: "testloss"
-  type: "EuclideanLoss"
+layers {
+  name: "euc_testloss"
+  type: EUCLIDEAN_LOSS
   bottom: "fc7"
   bottom: "fc7_p"
   include {
     phase: TEST
   }
-  top: "testloss"
+  top: "euc_testloss"
 }
-
 
