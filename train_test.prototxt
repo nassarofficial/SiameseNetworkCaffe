@@ -45,16 +45,19 @@ layers {
   include: { phase: TEST }
 }
 
-
-layers {
+layer {
   name: "conv1"
-  type: CONVOLUTION
+  type: "Convolution"
   bottom: "data"
   top: "conv1"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   convolution_param {
     num_output: 96
     kernel_size: 11
@@ -68,30 +71,17 @@ layers {
       value: 0
     }
   }
-  param: "conv1_w"
-  param: "conv1_b"
 }
-layers {
+layer {
   name: "relu1"
-  type: RELU
+  type: "ReLU"
   bottom: "conv1"
   top: "conv1"
 }
-layers {
-  name: "pool1"
-  type: POOLING
-  bottom: "conv1"
-  top: "pool1"
-  pooling_param {
-    pool: MAX
-    kernel_size: 3
-    stride: 2
-  }
-}
-layers {
+layer {
   name: "norm1"
-  type: LRN
-  bottom: "pool1"
+  type: "LRN"
+  bottom: "conv1"
   top: "norm1"
   lrn_param {
     local_size: 5
@@ -99,15 +89,30 @@ layers {
     beta: 0.75
   }
 }
-layers {
-  name: "conv2"
-  type: CONVOLUTION
+layer {
+  name: "pool1"
+  type: "Pooling"
   bottom: "norm1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "pool1"
   top: "conv2"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   convolution_param {
     num_output: 256
     pad: 2
@@ -119,33 +124,20 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0.1
     }
   }
-  param: "conv2_w"
-  param: "conv2_b"
 }
-layers {
+layer {
   name: "relu2"
-  type: RELU
+  type: "ReLU"
   bottom: "conv2"
   top: "conv2"
 }
-layers {
-  name: "pool2"
-  type: POOLING
-  bottom: "conv2"
-  top: "pool2"
-  pooling_param {
-    pool: MAX
-    kernel_size: 3
-    stride: 2
-  }
-}
-layers {
+layer {
   name: "norm2"
-  type: LRN
-  bottom: "pool2"
+  type: "LRN"
+  bottom: "conv2"
   top: "norm2"
   lrn_param {
     local_size: 5
@@ -153,15 +145,30 @@ layers {
     beta: 0.75
   }
 }
-layers {
-  name: "conv3"
-  type: CONVOLUTION
+layer {
+  name: "pool2"
+  type: "Pooling"
   bottom: "norm2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "conv3"
+  type: "Convolution"
+  bottom: "pool2"
   top: "conv3"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   convolution_param {
     num_output: 384
     pad: 1
@@ -175,24 +182,26 @@ layers {
       value: 0
     }
   }
-  param: "conv3_w"
-  param: "conv3_b"
 }
-layers {
+layer {
   name: "relu3"
-  type: RELU
+  type: "ReLU"
   bottom: "conv3"
   top: "conv3"
 }
-layers {
+layer {
   name: "conv4"
-  type: CONVOLUTION
+  type: "Convolution"
   bottom: "conv3"
   top: "conv4"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   convolution_param {
     num_output: 384
     pad: 1
@@ -204,27 +213,29 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0.1
     }
   }
-  param: "conv4_w"
-  param: "conv4_b"
 }
-layers {
+layer {
   name: "relu4"
-  type: RELU
+  type: "ReLU"
   bottom: "conv4"
   top: "conv4"
 }
-layers {
+layer {
   name: "conv5"
-  type: CONVOLUTION
+  type: "Convolution"
   bottom: "conv4"
   top: "conv5"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   convolution_param {
     num_output: 256
     pad: 1
@@ -236,21 +247,19 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0.1
     }
   }
-  param: "conv5_w"
-  param: "conv5_b"
 }
-layers {
+layer {
   name: "relu5"
-  type: RELU
+  type: "ReLU"
   bottom: "conv5"
   top: "conv5"
 }
-layers {
+layer {
   name: "pool5"
-  type: POOLING
+  type: "Pooling"
   bottom: "conv5"
   top: "pool5"
   pooling_param {
@@ -259,15 +268,19 @@ layers {
     stride: 2
   }
 }
-layers {
+layer {
   name: "fc6"
-  type: INNER_PRODUCT
+  type: "InnerProduct"
   bottom: "pool5"
   top: "fc6"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   inner_product_param {
     num_output: 4096
     weight_filler {
@@ -276,36 +289,38 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0.1
     }
   }
-  param: "fc6_w"
-  param: "fc6_b"
 }
-layers {
+layer {
   name: "relu6"
-  type: RELU
+  type: "ReLU"
   bottom: "fc6"
   top: "fc6"
 }
-layers {
+layer {
   name: "drop6"
-  type: DROPOUT
+  type: "Dropout"
   bottom: "fc6"
   top: "fc6"
   dropout_param {
     dropout_ratio: 0.5
   }
 }
-layers {
+layer {
   name: "fc7"
-  type: INNER_PRODUCT
+  type: "InnerProduct"
   bottom: "fc6"
   top: "fc7"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 10
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 20
+    decay_mult: 0
+  }
   inner_product_param {
     num_output: 4096
     weight_filler {
@@ -314,37 +329,26 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0.1
     }
-  }
-  param: "fc7_w"
-  param: "fc7_b"
-}
-layers {
-  name: "relu7"
-  type: RELU
-  bottom: "fc7"
-  top: "fc7"
-}
-layers {
-  name: "drop7"
-  type: DROPOUT
-  bottom: "fc7"
-  top: "fc7"
-  dropout_param {
-    dropout_ratio: 0.5
   }
 }
 
-layers {
+###############################################
+
+layer {
   name: "conv1_p"
-  type: CONVOLUTION
+  type: "Convolution"
   bottom: "data_p"
   top: "conv1_p"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   convolution_param {
     num_output: 96
     kernel_size: 11
@@ -358,30 +362,17 @@ layers {
       value: 0
     }
   }
-  param: "conv1_w"
-  param: "conv1_b"
 }
-layers {
+layer {
   name: "relu1_p"
-  type: RELU
+  type: "ReLU"
   bottom: "conv1_p"
   top: "conv1_p"
 }
-layers {
-  name: "pool1_p"
-  type: POOLING
-  bottom: "conv1_p"
-  top: "pool1_p"
-  pooling_param {
-    pool: MAX
-    kernel_size: 3
-    stride: 2
-  }
-}
-layers {
+layer {
   name: "norm1_p"
-  type: LRN
-  bottom: "pool1_p"
+  type: "LRN"
+  bottom: "conv1_p"
   top: "norm1_p"
   lrn_param {
     local_size: 5
@@ -389,15 +380,30 @@ layers {
     beta: 0.75
   }
 }
-layers {
-  name: "conv2_p"
-  type: CONVOLUTION
+layer {
+  name: "pool1_p"
+  type: "Pooling"
   bottom: "norm1_p"
+  top: "pool1_p"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "conv2_p"
+  type: "Convolution"
+  bottom: "pool1_p"
   top: "conv2_p"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   convolution_param {
     num_output: 256
     pad: 2
@@ -409,33 +415,20 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0.1
     }
   }
-  param: "conv2_w"
-  param: "conv2_b"
 }
-layers {
+layer {
   name: "relu2_p"
-  type: RELU
+  type: "ReLU"
   bottom: "conv2_p"
   top: "conv2_p"
 }
-layers {
-  name: "pool2_p"
-  type: POOLING
-  bottom: "conv2_p"
-  top: "pool2_p"
-  pooling_param {
-    pool: MAX
-    kernel_size: 3
-    stride: 2
-  }
-}
-layers {
+layer {
   name: "norm2_p"
-  type: LRN
-  bottom: "pool2_p"
+  type: "LRN"
+  bottom: "conv2_p"
   top: "norm2_p"
   lrn_param {
     local_size: 5
@@ -443,15 +436,30 @@ layers {
     beta: 0.75
   }
 }
-layers {
-  name: "conv3_p"
-  type: CONVOLUTION
+layer {
+  name: "pool2_p"
+  type: "Pooling"
   bottom: "norm2_p"
+  top: "pool2_p"
+  pooling_param {
+    pool: MAX
+    kernel_size: 3
+    stride: 2
+  }
+}
+layer {
+  name: "conv3_p"
+  type: "Convolution"
+  bottom: "pool2_p"
   top: "conv3_p"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   convolution_param {
     num_output: 384
     pad: 1
@@ -465,24 +473,26 @@ layers {
       value: 0
     }
   }
-  param: "conv3_w"
-  param: "conv3_b"
 }
-layers {
+layer {
   name: "relu3_p"
-  type: RELU
+  type: "ReLU"
   bottom: "conv3_p"
   top: "conv3_p"
 }
-layers {
+layer {
   name: "conv4_p"
-  type: CONVOLUTION
+  type: "Convolution"
   bottom: "conv3_p"
   top: "conv4_p"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   convolution_param {
     num_output: 384
     pad: 1
@@ -494,27 +504,29 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0.1
     }
   }
-  param: "conv4_w"
-  param: "conv4_b"
 }
-layers {
+layer {
   name: "relu4_p"
-  type: RELU
+  type: "ReLU"
   bottom: "conv4_p"
   top: "conv4_p"
 }
-layers {
+layer {
   name: "conv5_p"
-  type: CONVOLUTION
+  type: "Convolution"
   bottom: "conv4_p"
   top: "conv5_p"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   convolution_param {
     num_output: 256
     pad: 1
@@ -526,21 +538,19 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0.1
     }
   }
-  param: "conv5_w"
-  param: "conv5_b"
 }
-layers {
+layer {
   name: "relu5_p"
-  type: RELU
+  type: "ReLU"
   bottom: "conv5_p"
   top: "conv5_p"
 }
-layers {
+layer {
   name: "pool5_p"
-  type: POOLING
+  type: "Pooling"
   bottom: "conv5_p"
   top: "pool5_p"
   pooling_param {
@@ -549,15 +559,19 @@ layers {
     stride: 2
   }
 }
-layers {
+layer {
   name: "fc6_p"
-  type: INNER_PRODUCT
+  type: "InnerProduct"
   bottom: "pool5_p"
   top: "fc6_p"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
   inner_product_param {
     num_output: 4096
     weight_filler {
@@ -566,36 +580,38 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0.1
     }
   }
-  param: "fc6_w"
-  param: "fc6_b"
 }
-layers {
+layer {
   name: "relu6_p"
-  type: RELU
+  type: "ReLU"
   bottom: "fc6_p"
   top: "fc6_p"
 }
-layers {
+layer {
   name: "drop6_p"
-  type: DROPOUT
+  type: "Dropout"
   bottom: "fc6_p"
   top: "fc6_p"
   dropout_param {
     dropout_ratio: 0.5
   }
 }
-layers {
+layer {
   name: "fc7_p"
-  type: INNER_PRODUCT
+  type: "InnerProduct"
   bottom: "fc6_p"
   top: "fc7_p"
-  blobs_lr: 1
-  blobs_lr: 2
-  weight_decay: 1
-  weight_decay: 0
+  param {
+    lr_mult: 10
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 20
+    decay_mult: 0
+  }
   inner_product_param {
     num_output: 4096
     weight_filler {
@@ -604,31 +620,14 @@ layers {
     }
     bias_filler {
       type: "constant"
-      value: 1
+      value: 0.1
     }
-  }
-  param: "fc7_w"
-  param: "fc7_b"
-}
-layers {
-  name: "relu7_p"
-  type: RELU
-  bottom: "fc7_p"
-  top: "fc7_p"
-}
-layers {
-  name: "drop7_p"
-  type: DROPOUT
-  bottom: "fc7_p"
-  top: "fc7_p"
-  dropout_param {
-    dropout_ratio: 0.5
   }
 }
 
-layers {
+layer {
     name: "loss"
-    type: CONTRASTIVE_LOSS
+    type: "ContrastiveLoss"
     contrastive_loss_param {
         margin: 1.0
     }
@@ -638,10 +637,9 @@ layers {
     top: "loss"
 }
 
-
-layers {
+layer {
   name: "euc_testloss"
-  type: EUCLIDEAN_LOSS
+  type: "EuclideanLoss"
   bottom: "fc7"
   bottom: "fc7_p"
   include {
