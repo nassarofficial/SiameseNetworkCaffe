@@ -45,6 +45,8 @@ layers {
   include: { phase: TEST }
 }
 
+#####################################
+
 layer {
   name: "conv1"
   type: "Convolution"
@@ -333,8 +335,23 @@ layer {
     }
   }
 }
+layer {
+  name: "relu7"
+  type: "ReLU"
+  bottom: "fc7"
+  top: "fc7"
+}
+layer {
+  name: "drop7"
+  type: "Dropout"
+  bottom: "fc7"
+  top: "fc7"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
 
-###############################################
+#####################################
 
 layer {
   name: "conv1_p"
@@ -624,6 +641,23 @@ layer {
     }
   }
 }
+layer {
+  name: "relu7_p"
+  type: "ReLU"
+  bottom: "fc7_p"
+  top: "fc7_p"
+}
+layer {
+  name: "drop7_p"
+  type: "Dropout"
+  bottom: "fc7_p"
+  top: "fc7_p"
+  dropout_param {
+    dropout_ratio: 0.5
+  }
+}
+
+#####################################
 
 layer {
     name: "loss"
