@@ -657,7 +657,7 @@ layer {
   }
 }
 
-#####################################
+#### Try different margins
 
 layer {
     name: "loss"
